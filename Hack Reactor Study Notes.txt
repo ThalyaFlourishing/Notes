@@ -1,0 +1,167 @@
+STUDY NOTES
+===========
+
+INSTANTIATION PATTERNS: http://callmenick.com/post/instantiation-patterns-in-javascript
+JAVASCRIPT INSTANTIATION PATTERNS
+http://callmenick.com/post/instantiation-patterns-in-javascript
+FUNCTIONAL
+ . Everything is just declared normally in one big function
+ . Straightforward
+ . Uses much memory because every instance has copies of all the methods on it
+ . To instantiate: var myFunk = factoryFunk()
+
+FUNCTIONAL SHARED
+ . Same as functional excepting that the methods are declared outside the main function in a separate object
+ . Low memory usage: Uses extend to point the methods onto each instance, rather than duplicating them
+ . Edits to the methods are not inherited by existing instances
+ . To instantiate: var myFunk = factoryFunk()
+
+PROTOTYPAL
+ . Uses Object.create(methodsObject) to attach methods directly to the object's prototype (object.prototype.method_01, etc.)
+ . These objects refer to the separate methods object, so
+ . The methods on the instance are up-to-date; they just pass through to the methods object on a method call (delegate)
+ . To instantiate: var myFunk = factoryFunk() 
+
+PSEUDOCLASSICAL
+ . Uses 'New', which does an Object.create call and returns the object, as well as... ?
+ . Includes the object's constructor as a property of the... something.
+ . Automatically performs an 'Object.create(methods)' and 'return this'.
+ . Like Prototypal, methods are attached directly to the object's prototype.
+ . "the this keyword has a distinct scope"
+ . To instantiate: var myFunk = new factoryFunk()
+
+ANGULAR:
+ . "A $scope is a standard JavaScript object used to tie a view (a DOM element) to the controller. In the Model-View-Controller structure, this $scope object becomes the model. It provides an execution context that is bound to the DOM element (and its children)."
+ . "Both the controller and the view have access to the $scope so it can be used for communication between the two. This $scope object will house both the data and the functions that we’ll want to run in the view"
+ . All AngularJS apps have a $rootScope. The $rootScope is the top-most scope that is created on the DOM element that contains the ng-app directive.
+ . All '$scope's have prototypal inheritance (will look up-tree for properties not found at current level)
+ . {{ctrl.video.id.videoId | youtubeEmbedUrl}}
+
+REACT:
+ . "React components are superpowered HTML tags"
+ . "React apps contain components, with names, that are potentially nested."
+ 
+
+JQUERY:
+ . First Main format: $('searchParams').method()
+   . $ = jPuery invocation
+   . ('searchParams') = string for the search to match
+   . method() = one of the many jQuery methods
+ . Second Main format: Same, but $('contentToGive')
+ . The collection returned by the jQuery call is called a 'jQuery Array'
+ . EXAMPLE: $('span.article') returns all 'span' elements with an 'article' class.
+   . This returns a container with an array of DOM nodes and all the jQuery methods attached to it
+   
+SUPER-CLASSES vs. SUB-CLASSES:
+ . Super-class for similarities, sub-classes for differences
+ . Meaning, the super-class has only the properties which *all* sub-classed objects will need. The sub-classes should have only the properties which make them different from each other.
+
+.this BINDING:
+  . Whenever you ask another system, such as 'setTimeout' to invoke a function on your behalf, and you want to ensure the correct '.this' binding, use this pattern:
+  
+  var alice = {teeth: 'dirty'};
+  
+  var brushTeeth = function(){
+  	this.teeth = 'clean';
+  	};
+  
+  setTimeout(function() {
+  	brushTeeth.call(alice)
+  	}, 1000);
+  	
+CALL: Invoking a function and passing an *ARGUMENT LIST* (comma-separated)
+ . The first argument is the value to use for .this
+ . call is a method on the function prototype. It is therefore usable as a .method on any function
+ . From MDN: "While the syntax of call() function is almost identical to that of apply(), the fundamental difference is that call() accepts an argument list, while apply() accepts a single array of arguments.
+ . EXAMPLE: function Product(name, price) {
+              this.name = name;
+              this.price = price;
+            }
+            function Food(name, price) {
+              Product.call(this, name, price);
+              this.category = 'food';
+            }
+
+APPLY: Invoking a function and passing an *ARRAY OF ARGS*
+ . apply is a method on the function prototype. It is therefore usable as a .method on any function
+ . Advantage: You can just pass in the built-in 'arguments' array. This way you do not need to know what the arguments will be.
+ . EXAMPLE: // find the min/max number in an array
+            var numbers = [5, 6, 2, 3, 7];
+            var max = Math.max.apply(null, numbers); 
+            var min = Math.min.apply(null, numbers);
+
+BIND:
+ . bind is a method on the function prototype. It is therefore usable as a .method on any function
+ . From MDN: "The bind() method creates a new function that, when called, has its .this keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called."
+ . The purpose is to invoke or store the function with the binding you give it.
+ . Useful for delayed execution
+ . Also, you can pass in the arguments. Format: function.bind('.this'_value, arg1, arg2, ...)
+ . Returns the function itself, with the chosen .this and arguments, rather than returning the evaluation of the function.
+ . Seems to invoke a .call on the stored function when the time comes for it to run.
+ . EXAMPLE:
+   var nameList = function (name1, name2, name3) {
+   	return this + name + name2 + name3;
+	 }
+   var namesPrint = nameList.bind('banana');
+   namesPrint(' Bob', ' Dave', ' Steve'); <== RETURNS: 'banana Bob Dave Steve'
+ . TOY-PROBLEM SYNTAX:  (NOT REAL-WORLD USABLE?)
+     var newFunkName = bind(oldFunkName, .thisValue, arg1, ...)
+     var boundShout = bind(alice.shout, alice);
+     boundShout(); // alerts 'alice'
+
+
+.CONSTRUCTOR: A property of (some) objects which is used to indicate its origin (i.e. what made it) - Used to indicate to what to delegate failed property-lookups
+ . EXAMPLE: Rectangle.prototype = Object.create(Shape.prototype);
+            Rectangle.prototype.constructor = Rectangle;
+
+
+CLASSES:
+ . Basic idea: A constructor (factory) function which generates objects which have a set of attributes and/or methods.
+ . A 'Super-Class' is a class for which there exist other classes which use this class as their starting point. 
+ . A 'Sub-Class' is a class which either duplicates or delegates to the methods of another class. That other class is its 'Super-Class'.
+
+
+RESTful API:
+	REpresentational
+	State
+	Transfer
+ . An application program interface (API) that uses HTTP requests to GET, PUT, POST and DELETE data.
+
+
+MVC: MODEL, VIEW, CONTROLLER
+ . The general idea is to organize your interface into logical views, backed by models, each of which can be updated independently when the model changes, without having to redraw the page.
+
+ . MODEL: A Model manages an internal table of data attributes, and triggers "change" events when any of its data is modified. Models handle syncing data with a persistence layer — usually a REST API with a backing database.
+ 
+ . VIEW: A View is an atomic chunk of user interface. It often renders the data from a specific model, or number of models — but views can also be data-less chunks of UI that stand alone. Models should be generally unaware of views. Instead, views listen to the model "change" events, and react or re-render themselves appropriately.
+ 
+ . CONTROLLER: The user interface components.
+
+COLLECTIONS:
+ . A Collection helps you deal with a group of related models, handling the loading and saving of new models to the server and providing helper functions for performing aggregations or computations against a list of models. Aside from their own events, collections act as proxies to send through all of the events that occur to models within them, allowing you to listen in one place for any change that might happen to any model in the collection.
+
+COMPLEXITY: (Big O notation) - http://donkcowan.com/blog/2013/5/11/big-o-notation
+ . O(1) = Constant
+ . O(n) = Linear
+ . O(n^2) = Quadratic
+ . O(Log base c of n) = Logarithmic (Binary search, c=2 - Trinary search, c=3)
+ . O(n log(n)) = n log n
+ . O(c^n) = Exponential = c = # of possibilities, n = number of places/items
+ . O(n!) = Factorial
+ . O(n^n) = 
+
+JSON:
+ . JSON is a serialization format
+ 
+ 
+ 
+PROMISES: https://spring.io/understanding/javascript-promises
+ . A promis is a wrapped function and the data it needs to execute when conditions warrant.
+ . "A promise represents the eventual result of an asynchronous operation. It is a placeholder into which the successful result value or reason for failure will materialize."
+ . The primary way of interacting with a promise is through its 'then' method, which registers callbacks to receive either a promise’s eventual value or the reason why the promise cannot be fulfilled.
+ . A promise can be in one of 3 states:
+   - Pending - the promise’s outcome hasn’t yet been determined, because the asynchronous operation that will produce its result hasn’t completed yet. State can transition to 'Fulfilled' or 'Rejected'.
+   - Fulfilled - the asynchronous operation has completed, and the promise has a value. State can no longer change. Has a 'value'.
+   - Rejected - the asynchronous operation failed, and the promise will never be fulfilled. In the rejected state, a promise has a reason that indicates why the operation failed. State can no longer change. Has a 'reason'.
+   
+ . Latest and Greatest: https://promisesaplus.com
