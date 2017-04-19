@@ -20,7 +20,7 @@ PROTOTYPAL
  . Uses Object.create(methodsObject) to attach methods directly to the object's prototype (object.prototype.method_01, etc.)
  . These objects refer to the separate methods object, so
  . The methods on the instance are up-to-date; they just pass through to the methods object on a method call (delegate)
- . To instantiate: var myFunk = factoryFunk() 
+ . To instantiate: var myFunk = factoryFunk()
 
 PSEUDOCLASSICAL
  . Uses 'New', which does an Object.create call and returns the object, as well as... ?
@@ -40,7 +40,7 @@ ANGULAR:
 REACT:
  . "React components are superpowered HTML tags"
  . "React apps contain components, with names, that are potentially nested."
- 
+
 
 JQUERY:
  . First Main format: $('searchParams').method()
@@ -51,24 +51,24 @@ JQUERY:
  . The collection returned by the jQuery call is called a 'jQuery Array'
  . EXAMPLE: $('span.article') returns all 'span' elements with an 'article' class.
    . This returns a container with an array of DOM nodes and all the jQuery methods attached to it
-   
+
 SUPER-CLASSES vs. SUB-CLASSES:
  . Super-class for similarities, sub-classes for differences
  . Meaning, the super-class has only the properties which *all* sub-classed objects will need. The sub-classes should have only the properties which make them different from each other.
 
 .this BINDING:
   . Whenever you ask another system, such as 'setTimeout' to invoke a function on your behalf, and you want to ensure the correct '.this' binding, use this pattern:
-  
+
   var alice = {teeth: 'dirty'};
-  
+
   var brushTeeth = function(){
-  	this.teeth = 'clean';
-  	};
-  
+    this.teeth = 'clean';
+    };
+
   setTimeout(function() {
-  	brushTeeth.call(alice)
-  	}, 1000);
-  	
+    brushTeeth.call(alice)
+    }, 1000);
+
 CALL: Invoking a function and passing an *ARGUMENT LIST* (comma-separated)
  . The first argument is the value to use for .this
  . call is a method on the function prototype. It is therefore usable as a .method on any function
@@ -87,7 +87,7 @@ APPLY: Invoking a function and passing an *ARRAY OF ARGS*
  . Advantage: You can just pass in the built-in 'arguments' array. This way you do not need to know what the arguments will be.
  . EXAMPLE: // find the min/max number in an array
             var numbers = [5, 6, 2, 3, 7];
-            var max = Math.max.apply(null, numbers); 
+            var max = Math.max.apply(null, numbers);
             var min = Math.min.apply(null, numbers);
 
 BIND:
@@ -100,8 +100,8 @@ BIND:
  . Seems to invoke a .call on the stored function when the time comes for it to run.
  . EXAMPLE:
    var nameList = function (name1, name2, name3) {
-   	return this + name + name2 + name3;
-	 }
+    return this + name + name2 + name3;
+   }
    var namesPrint = nameList.bind('banana');
    namesPrint(' Bob', ' Dave', ' Steve'); <== RETURNS: 'banana Bob Dave Steve'
  . TOY-PROBLEM SYNTAX:  (NOT REAL-WORLD USABLE?)
@@ -117,14 +117,14 @@ BIND:
 
 CLASSES:
  . Basic idea: A constructor (factory) function which generates objects which have a set of attributes and/or methods.
- . A 'Super-Class' is a class for which there exist other classes which use this class as their starting point. 
+ . A 'Super-Class' is a class for which there exist other classes which use this class as their starting point.
  . A 'Sub-Class' is a class which either duplicates or delegates to the methods of another class. That other class is its 'Super-Class'.
 
 
 RESTful API:
-	REpresentational
-	State
-	Transfer
+  REpresentational
+  State
+  Transfer
  . An application program interface (API) that uses HTTP requests to GET, PUT, POST and DELETE data.
 
 
@@ -132,9 +132,9 @@ MVC: MODEL, VIEW, CONTROLLER
  . The general idea is to organize your interface into logical views, backed by models, each of which can be updated independently when the model changes, without having to redraw the page.
 
  . MODEL: A Model manages an internal table of data attributes, and triggers "change" events when any of its data is modified. Models handle syncing data with a persistence layer — usually a REST API with a backing database.
- 
+
  . VIEW: A View is an atomic chunk of user interface. It often renders the data from a specific model, or number of models — but views can also be data-less chunks of UI that stand alone. Models should be generally unaware of views. Instead, views listen to the model "change" events, and react or re-render themselves appropriately.
- 
+
  . CONTROLLER: The user interface components.
 
 COLLECTIONS:
@@ -148,20 +148,12 @@ COMPLEXITY: (Big O notation) - http://donkcowan.com/blog/2013/5/11/big-o-notatio
  . O(n log(n)) = n log n
  . O(c^n) = Exponential = c = # of possibilities, n = number of places/items
  . O(n!) = Factorial
- . O(n^n) = 
+ . O(n^n) =
 
 JSON:
  . JSON is a serialization format
+
+
+PROMISES: - MOVED TO Promises.txt in the Notes repo
+
  
- 
- 
-PROMISES: https://spring.io/understanding/javascript-promises
- . A promis is a wrapped function and the data it needs to execute when conditions warrant.
- . "A promise represents the eventual result of an asynchronous operation. It is a placeholder into which the successful result value or reason for failure will materialize."
- . The primary way of interacting with a promise is through its 'then' method, which registers callbacks to receive either a promise’s eventual value or the reason why the promise cannot be fulfilled.
- . A promise can be in one of 3 states:
-   - Pending - the promise’s outcome hasn’t yet been determined, because the asynchronous operation that will produce its result hasn’t completed yet. State can transition to 'Fulfilled' or 'Rejected'.
-   - Fulfilled - the asynchronous operation has completed, and the promise has a value. State can no longer change. Has a 'value'.
-   - Rejected - the asynchronous operation failed, and the promise will never be fulfilled. In the rejected state, a promise has a reason that indicates why the operation failed. State can no longer change. Has a 'reason'.
-   
- . Latest and Greatest: https://promisesaplus.com

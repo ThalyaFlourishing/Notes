@@ -1,0 +1,55 @@
+PROMISES: 
+ . LINKS: 
+ 	. https://spring.io/understanding/javascript-promises
+  . http://12devs.co.uk/articles/promises-an-alternative-way-to-approach-asynchronous-javascript
+ . A promise is a wrapped function and the data it needs to execute when conditions warrant.
+ . "A Promise is a placeholder object that represents the result of an async operation."
+ . "A promise represents the eventual result of an asynchronous operation. It is a placeholder into which the successful result value or reason for failure will materialize."
+ . The primary way of interacting with a promise is through its 'then' method, which registers callbacks to receive either a promise’s eventual value or the reason why the promise cannot be fulfilled.
+ . A promise can be in one of 3 states:
+   - Pending - the promise’s outcome hasn’t yet been determined, because the asynchronous operation that will produce its result hasn’t completed yet. State can transition to 'Fulfilled' or 'Rejected'.
+   - Fulfilled - the asynchronous operation has completed, and the promise has a value. State can no longer change. Has a 'value'.
+   - Rejected - the asynchronous operation failed, and the promise will never be fulfilled. In the rejected state, a promise has a reason that indicates why the operation failed. State can no longer change. Has a 'reason'.
+ . The primary API for a promise is its 'then' method, which registers callbacks to receive either the eventual value or the reason why the promise cannot be fulfilled.
+ . ES6 conforms (?) to this Latest and Greatest: https://promisesaplus.com
+ . Syntax: promiseFunkName.then(fulfilledFunction, rejectedFunction, 
+ . EXAMPLE:
+    var greetingPromise = sayHello();  // UNCLEAR ON PURPOSE OF THIS
+    greetingPromise.then(function (greeting) {
+        console.log(greeting);    // 'hello world’
+    }, function (error) {
+        console.error('uh oh: ', error);   // 'uh oh: something bad happened’
+    });
+ . A function passed to then can also return another promise. This allows asynchronous operations to be chained together, so that they are guaranteed to happen in the correct order. 
+ . EXAMPLES OF CHAINING:
+      var greetingPromise = sayHello();
+      greetingPromise.then(firstFulfilledFunction{...}).then(secondFulfilledFunction{...});
+ - -OR- -
+      var greetingPromise = sayHello();
+      greetingPromise
+          .then(firstFulfilledFunction(){})
+          .then(secondFulfilledFunction(){}, errorFunction(){});
+                                         <FROM TRY/CATCH, NOT SAME AS
+                                         'REJECTED'>
+
+ . EXAMPLE FROM 12devs.co.uk:
+ 
+asyncCall()
+.then(function(data1){
+    // do something...
+    return anotherAsyncCall();
+})
+.then(function(data2){
+    // do something...  
+    return oneMoreAsyncCall();    
+})
+.then(function(data3){
+   // the third and final async response
+})
+.fail(function(err) {
+   // handle any error resulting from any of the above calls    
+})
+.done();
+The asyncCall(), instead of requiring a callback, returns us a Promise object. The subsequent then() calls on the Promise object also return promises, thus allowing us to chain a sequence of asynchronous operations. The fail() takes a function that will be invoked when any of the preceding asynchronous calls fail
+
+ . 
